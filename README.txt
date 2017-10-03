@@ -13,6 +13,8 @@ Add-on to support ingestion of Mixpanel data into Splunk.
 ### Export API Input:
 Accesses Mixpanel's data export API which provides raw events from date range specified with daily granularity (returning all events by day).  This app will initially pull the previous day's events at a daily interval and maintain a checkpoint of its last successful export.  Depending on your project's event volume, exporting larger time spans could cause Splunk to index a very large amount of data.  Due to the limited granularity of this API, running it more frequently than once (1) daily would create duplicate records.
 
+> This input requires the Mixpanel project timezone to correctly set input checkpoints. Future updates may expand the use of this configuration to simplify setup, etc.
+
 ### Live API Input (UNOFFICIAL):
 Accesses Mixpanel's "Live" API which is used in the Mixpanel UI to display events as they arrive. This input leverages this unofficial & undocumented API to provide visibility with higher frequency than the data export API at the tradeoff of accuracy.  Per Mixpanel documentation, some browser clients can significantly delay sending events to Mixpanel (such as mobile apps) and will likely not be displayed via this input.  To prevent duplication of events, this input maintains a checkpoint of its last successful execution and discards events with timestamps dated prior to that checkpoint.
 
@@ -59,6 +61,7 @@ For detail on kvstore fields and types, see Splunk kvstore documentation.
 ### Timezone Configuration:
 For the Mixpanel Export API, the timezone is based on your Mixpanel project's configurations. Configure props.conf "TZ" setting per Splunk's documentation to match your projects configurations. If ingesting multiple projects with with different timezone configurations, you should configure additional sourcetypes or remove timestamp parsing from props.conf. See the Mixpanel API documentation for more information on timestamps and the Export API.
 
+- [Mixpanel Project Timezone Configuration](https://mixpanel.com/help/questions/articles/what-timezone-does-mixpanel-use-how-can-i-change-it)
 - [Mixpanel Export API Documentation](https://mixpanel.com/help/reference/exporting-raw-data)
 
 

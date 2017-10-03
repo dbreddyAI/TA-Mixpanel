@@ -32,20 +32,6 @@ def collect_events(helper, ew):
     kvstore_fields = helper.get_arg('kvstore_fields')
     enable_index = helper.get_arg('enable_index')
 
-    # Set time to filter returned results by timestamp
-    #start_time = (time.time() - 30)
-
-    # Create checkpoint key
-    #opt_checkpoint = "mixpanel_people-" + inputname
-    
-    #Check for last query execution data in kvstore & generate if not present
-    #try:
-    #    last_status = helper.get_check_point(opt_checkpoint) or start_time
-    #    helper.log_debug("[" + inputname + "] Mixpanel People API - Last successful checkpoint time: " + str(last_status))
-    #except Exception as e:
-    #    helper.log_error("[" + inputname + "] Mixpanel People API - Unable to retrieve last execution checkpoint!")
-    #    raise e
-
     # Function to remove $ symbols from custom fields
     def convert(input):
         if isinstance(input, dict):
@@ -118,13 +104,6 @@ def collect_events(helper, ew):
         
         parameters = {'selector': ''}
         response = api.request(['engage'], parameters)
-    
-        # Return API response code
-        #r_status = response.status_code
-        # Return API request status_code
-        #if r_status is not 200:
-        #    helper.log_error("input_type=mixpanel_people input=" + inputname + " message='API query unsuccessful.' status_code=" + str    (r_status))
-        #    response.raise_for_status()
 
         if response['results'] is None:
             helper.log_info("input_type=mixpanel_people input={0:s} message='No events retrieved from Mixpanel People API.'".format(inputname))
@@ -172,10 +151,7 @@ def collect_events(helper, ew):
             if has_results:
                 response = api.request(['engage'], parameters)
             
-        #Update last completed execution time
-        #helper.save_check_point(opt_checkpoint, last_status)
         helper.log_info("input_type=mixpanel_people input={0:s} message='Collection complete.' indexed={1:d} kvstore={2:d} total_records={3:d}".format(inputname,i,k,global_total))
-        #helper.log_debug("[" + inputname + "] Mixpanel People API - Storing checkpoint time: " + str(last_status))
 
     except Exception as error:
         helper.log_error("input_type=mixpanel_people input={0:s} message='An unknown error occurred!'".format(inputname))

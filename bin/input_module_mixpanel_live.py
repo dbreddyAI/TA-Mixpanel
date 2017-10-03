@@ -43,7 +43,7 @@ def collect_events(helper, ew):
         last_status = helper.get_check_point(opt_checkpoint) or start_time
         helper.log_debug("input_type=mixpanel_live input={0:s} message='Last successful checkpoint time.' last_status={1:f}".format(inputname,last_status))
     except Exception as e:
-        helper.log_error("input_type=mixpanel_live input={0:s} message='Unable to retrieve last execution checkpoint!'".format(r_status))
+        helper.log_error("input_type=mixpanel_live input={0:s} message='Unable to retrieve last execution checkpoint!'".format(inputname))
         raise e
         
     auth_token = base64.b64encode(opt_apikey + ":").decode("ascii")
